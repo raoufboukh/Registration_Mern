@@ -1,11 +1,25 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
   return (
     <div className="flex justify-center items-center bg-black h-screen">
       <div className="w-[500px] shadow-md  shadow-gray-500  rounded-md text-white">
         <h1 className="text-center text-3xl">Register</h1>
-        <form action="" className="px-16 py-5">
+        <form
+          action=""
+          className="px-16 py-5"
+          onSubmit={(e) => {
+            e.preventDefault();
+            axios
+              .post("http://localhost:3001/register", { name, email, pass })
+              .then((res) => console.log(res.data));
+          }}
+        >
           <div>
             <label className="block w-fit" htmlFor="name">
               Name
@@ -14,6 +28,8 @@ const Register = () => {
               className="bg-black border rounded-md outline-none border-gray-500 p-1 text-lg px-2 my-3 w-full"
               type="text"
               id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div>
@@ -24,6 +40,8 @@ const Register = () => {
               className="bg-black border rounded-md outline-none border-gray-500 p-1 text-lg px-2 my-3 w-full"
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div>
@@ -34,6 +52,8 @@ const Register = () => {
               className="bg-black border rounded-md outline-none border-gray-500 p-1 text-lg px-2 my-3 w-full"
               type="password"
               id="pass"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
             />
           </div>
           <button
