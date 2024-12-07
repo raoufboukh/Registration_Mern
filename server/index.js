@@ -12,6 +12,22 @@ app.use(express.json());
 
 app.use(cors());
 
+app.post("/login", (req, res) => {
+  Employee.findOne({ email: req.body.email })
+    .then((data) => {
+      if (data) {
+        if (data.pass === req.body.pass) {
+          res.send("Success");
+        } else {
+          res.send("the password is incorrect");
+        }
+      } else {
+        res.send("Invalid Credentials");
+      }
+    })
+    .catch((err) => console.log(err));
+});
+
 app.post("/register", (req, res) => {
   Employee.create(req.body)
     .then((data) => res.send(data))
