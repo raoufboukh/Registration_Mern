@@ -18,6 +18,9 @@ const Register = () => {
             axios
               .post("http://localhost:3001/register", { name, email, pass })
               .then((res) => console.log(res.data));
+              setName("");
+              setEmail("");
+              setPass("");
           }}
         >
           <div>
