@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import Employee from "./models/employee.js";
+import bcrypt, { hash } from "bcrypt";
 
 const dbUrl =
   "mongodb+srv://raoufbouk:raoufking7@cluster0.izt9f.mongodb.net/Authentication?retryWrites=true&w=majority&appName=Cluster0";
@@ -29,9 +30,18 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  Employee.create(req.body)
-    .then((data) => res.send(data))
-    .catch((err) => console.log(err));
+  const { name, email, pass } = req.body;
+  bcrypt
+    .hash(pass, 10)
+    .then((hash) => {
+      Employee.create({ name, email, pass: hash })
+        .then((data) => res.send(data))
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err.message));
+  // Employee.create(req.body)
+  //   .then((data) => res.send(data))
+  //   .catch((err) => console.log(err));
 });
 
 mongoose
