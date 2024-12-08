@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import Employee from "./models/employee.js";
-import bcrypt, { hash } from "bcrypt";
+import bcrypt, { compare } from "bcrypt";
 
 const dbUrl =
   "mongodb+srv://raoufbouk:raoufking7@cluster0.izt9f.mongodb.net/Authentication?retryWrites=true&w=majority&appName=Cluster0";
@@ -14,19 +14,20 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/login", (req, res) => {
-  Employee.findOne({ email: req.body.email })
-    .then((data) => {
-      if (data) {
-        if (data.pass === req.body.pass) {
-          res.send("Success");
+  const { email, pass } = req.body;
+  Employee.findOne({ email: email }).then((data) => {
+    if (data) {
+      bcrypt.compare(pass, data.pass, (err, response) => {
+        if (response) {
+          res.json("Success");
         } else {
-          res.send("the password is incorrect");
+          res.json("The password is incorrect");
         }
-      } else {
-        res.send("Invalid Credentials");
-      }
-    })
-    .catch((err) => console.log(err));
+      });
+    } else {
+      res.json("Invalid Credentials");
+    }
+  });
 });
 
 app.post("/register", (req, res) => {
