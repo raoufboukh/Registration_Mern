@@ -8,6 +8,7 @@ const Login = () => {
   const [pass, setPass] = useState("");
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  axios.defaults.withCredentials = true;
   return (
     <div className="flex justify-center items-center bg-black h-screen">
       <div className="w-[500px] shadow-md  shadow-gray-500  rounded-md text-white">
@@ -20,7 +21,6 @@ const Login = () => {
             axios
               .post("http://localhost:3001/login", { email, pass })
               .then((res) => {
-                console.log(res.data);
                 if (res.data === "Success") {
                   navigate("/dashboard");
                   enqueueSnackbar("Logged in successfully", {
